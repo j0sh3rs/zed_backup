@@ -4,19 +4,20 @@ from dotenv import load_dotenv
 
 # Get the directory where the script is located
 script_dir = os.path.dirname(os.path.abspath(__file__))
-# Load environment variables from .env file in the script's directory
-load_dotenv(os.path.join(script_dir, ".env"))
-
+# Get the user's home directory
+HOME_DIR = os.path.expanduser("~")
 # Configuration
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
-FILE_TO_UPLOAD = os.getenv("FILE_TO_UPLOAD", "~/.config/zed/settings.json")
+FILE_TO_UPLOAD = os.getenv("FILE_TO_UPLOAD", f"{HOME_DIR}/.config/zed/settings.json")
+# Load environment variables from .env file in the script's directory
+load_dotenv(os.path.join(script_dir, ".env"), override=True)
+
 if not GITHUB_TOKEN:
     raise Exception(
         "GITHUB_TOKEN is not set. Please set it in your .env file or environment variables."
     )
 
 GIST_ID_FILE = "gist_id.txt"
-FILE_TO_UPLOAD = "~/.config/zed/settings.json"
 GITHUB_API_URL = "https://api.github.com/gists"
 
 headers = {
@@ -37,9 +38,11 @@ def create_gist():
     if response.status_code == 201:
         gist = response.json()
         gist_id = gist["id"]
+        gist_url = gist["html_url"]
         with open(GIST_ID_FILE, "w") as f:
             f.write(gist_id)
         print("Created gist with id:", gist_id)
+        print("Gist URL:", gist_url)
     else:
         print("Error creating gist:", response.status_code, response.text)
 
@@ -51,7 +54,9 @@ def update_gist(gist_id):
     url = f"{GITHUB_API_URL}/{gist_id}"
     response = requests.patch(url, headers=headers, json=data)
     if response.status_code == 200:
+        gist_url = response.json()["html_url"]
         print("Updated gist", gist_id)
+        print("Gist URL:", gist_url)
     else:
         print("Error updating gist:", response.status_code, response.text)
 
