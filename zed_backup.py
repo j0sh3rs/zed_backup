@@ -1,0 +1,70 @@
+import os
+import requests
+from dotenv import load_dotenv
+
+# Load environment variables from .env file (if it exists)
+load_dotenv()
+
+# Configuration
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+FILE_TO_UPLOAD = os.getenv("FILE_TO_UPLOAD", "~/.config/zed/settings.json")
+if not GITHUB_TOKEN:
+    raise Exception(
+        "GITHUB_TOKEN is not set. Please set it in your .env file or environment variables."
+    )
+
+GIST_ID_FILE = "gist_id.txt"
+FILE_TO_UPLOAD = "~/.config/zed/settings.json"
+GITHUB_API_URL = "https://api.github.com/gists"
+
+headers = {
+    "Authorization": f"token {GITHUB_TOKEN}",
+    "Accept": "application/vnd.github.v3+json",
+}
+
+
+def create_gist():
+    with open(FILE_TO_UPLOAD, "r") as f:
+        content = f.read()
+    data = {
+        "description": "Automated update of file content",
+        "public": False,
+        "files": {os.path.basename(FILE_TO_UPLOAD): {"content": content}},
+    }
+    response = requests.post(GITHUB_API_URL, headers=headers, json=data)
+    if response.status_code == 201:
+        gist = response.json()
+        gist_id = gist["id"]
+        with open(GIST_ID_FILE, "w") as f:
+            f.write(gist_id)
+        print("Created gist with id:", gist_id)
+    else:
+        print("Error creating gist:", response.status_code, response.text)
+
+
+def update_gist(gist_id):
+    with open(FILE_TO_UPLOAD, "r") as f:
+        content = f.read()
+    data = {"files": {os.path.basename(FILE_TO_UPLOAD): {"content": content}}}
+    url = f"{GITHUB_API_URL}/{gist_id}"
+    response = requests.patch(url, headers=headers, json=data)
+    if response.status_code == 200:
+        print("Updated gist", gist_id)
+    else:
+        print("Error updating gist:", response.status_code, response.text)
+
+
+def main():
+    if not os.path.exists(GIST_ID_FILE):
+        create_gist()
+    else:
+        with open(GIST_ID_FILE, "r") as f:
+            gist_id = f.read().strip()
+        if gist_id:
+            update_gist(gist_id)
+        else:
+            create_gist()
+
+
+if __name__ == "__main__":
+    main()
