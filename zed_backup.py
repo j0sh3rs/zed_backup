@@ -3,14 +3,17 @@ import requests
 from dotenv import load_dotenv
 
 # Get the directory where the script is located
-script_dir = os.path.dirname(os.path.abspath(__file__))
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Load environment variables from .env file in the script's directory
+load_dotenv(os.path.join(SCRIPT_DIR, ".env"), override=True)
+
+# Get the GitHub token from the environment variables
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+
 # Get the user's home directory
 HOME_DIR = os.path.expanduser("~")
-# Configuration
-GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 FILE_TO_UPLOAD = os.getenv("FILE_TO_UPLOAD", f"{HOME_DIR}/.config/zed/settings.json")
-# Load environment variables from .env file in the script's directory
-load_dotenv(os.path.join(script_dir, ".env"), override=True)
 
 if not GITHUB_TOKEN:
     raise Exception(
