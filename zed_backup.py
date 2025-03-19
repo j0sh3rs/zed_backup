@@ -2,8 +2,10 @@ import os
 import requests
 from dotenv import load_dotenv
 
-# Load environment variables from .env file (if it exists)
-load_dotenv()
+# Get the directory where the script is located
+script_dir = os.path.dirname(os.path.abspath(__file__))
+# Load environment variables from .env file in the script's directory
+load_dotenv(os.path.join(script_dir, ".env"))
 
 # Configuration
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")

@@ -30,6 +30,10 @@ cd zed_backup
 
 2. Install the required dependencies:
 
+This repo relies on the `uv` binary from Astral. You can install it by following their documentation [here](https://github.com/astral-sh/uv?tab=readme-ov-file#installation)
+
+Then run:
+
 ```bash
 uv sync
 ```
@@ -65,7 +69,7 @@ uv sync
 2. Run the script:
 
 ```bash
-python zed_backup.py
+uv run python zed_backup.py
 ```
 
 3. On the first run, the script will create a new Gist and store the Gist ID in `gist_id.txt`. On subsequent runs, it will update the existing Gist.
@@ -83,6 +87,19 @@ You can modify the following variables in the script to customize its behavior:
 
 - `GIST_ID_FILE`: The file where the Gist ID is stored (default: `gist_id.txt`)
 - `FILE_TO_UPLOAD`: The file to backup (default: `~/.config/zed/settings.json`)
+
+The script will also attempt to load a `.env` file from the same directory the script is located in.
+
+## Automating
+
+You can automate the backup process by setting up a cron job or a scheduled task to run the script at regular intervals.
+
+For defining a cron (most linux and mac systems), you can configure the cron job by running:
+
+```bash
+# Every hour at the top of the hour
+0 * * * * /path/to/uv run python /path/to/zed_backup.py >> /path/to/zed_backup.log 2>&1
+```
 
 ## Troubleshooting
 
