@@ -35,7 +35,7 @@ This repo relies on the `uv` binary from Astral. You can install it by following
 Then run:
 
 ```bash
-uv sync
+uv sync --no-dev
 ```
 
 ## Setup
@@ -110,6 +110,20 @@ For defining a cron (most linux and mac systems), you can configure the cron job
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Testing
+
+There are some mocked out tests for this project that can help ensure the script is working as expected. To run the tests, do the following:
+
+```bash
+# Sync all dependencies
+uv sync --all-groups
+
+# Run the tests
+uv run pytest --cov=zed_backup -xvs test_zed_backup.py
+
+# The `-x` flag stops the test run on the first failure, `-v` provides verbose output, and `-s` allows print statements to be displayed.
+```
 
 ## License
 
