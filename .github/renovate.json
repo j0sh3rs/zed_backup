@@ -23,7 +23,6 @@
       "matchManagers": [
         "pip_requirements",
         "pip_setup",
-        "pyproject"
       ],
       "matchUpdateTypes": [
         "minor",
