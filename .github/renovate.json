@@ -9,37 +9,53 @@
     ":disableRateLimiting",
     ":dependencyDashboard",
     ":semanticCommits",
-    ":timezone(America/New_York)",
+    ":timezone(America/New_York)"
   ],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": [
+      "before 5am on monday"
+    ]
+  },
+  "packageRules": [
+    {
+      "automerge": true,
+      "matchManagers": [
+        "pip_requirements",
+        "pip_setup",
+        "pyproject"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ]
+    },
+    {
+      "groupName": "pytest packages",
+      "matchPackagePatterns": [
+        "pytest"
+      ]
+    }
+  ],
+  "pip_requirements": {
+    "fileMatch": [
+      "(^|/)requirements\\.txt$",
+      "(^|/)requirements\\/.+\\.txt$"
+    ]
+  },
+  "prConcurrentLimit": 10,
+  "prHourlyLimit": 2,
+  "pyproject": {
+    "fileMatch": [
+      "(^|/)pyproject\\.toml$"
+    ]
+  },
+  "python": {
+    "enabled": true
+  },
   "suppressNotifications": [
     "prEditedNotification",
     "prIgnoreNotification"
   ],
-  "packageRules": [
-    {
-      "matchManagers": ["pip_requirements", "pip_setup", "pyproject"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true
-    },
-    {
-      "matchPackagePatterns": ["pytest"],
-      "groupName": "pytest packages"
-    }
-  ],
-  "python": {
-    "enabled": true
-  },
-  "pip_requirements": {
-    "fileMatch": ["(^|/)requirements\\.txt$", "(^|/)requirements\\/.+\\.txt$"]
-  },
-  "pyproject": {
-    "fileMatch": ["(^|/)pyproject\\.toml$"]
-  },
-  "lockFileMaintenance": {
-    "enabled": true,
-    "schedule": ["before 5am on monday"]
-  },
-  "timezone": "America/New_York",
-  "prHourlyLimit": 2,
-  "prConcurrentLimit": 10,
+  "timezone": "America/New_York"
 }
