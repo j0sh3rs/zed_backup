@@ -1,0 +1,45 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "helpers:pinGitHubActionDigests",
+    "github>j0sh3rs/home-cluster//.renovate/semanticCommits.json5",
+    "github>j0sh3rs/home-cluster//.renovate/labels.json5",
+    ":automergeBranch",
+    ":disableRateLimiting",
+    ":dependencyDashboard",
+    ":semanticCommits",
+    ":timezone(America/New_York)",
+  ],
+  "suppressNotifications": [
+    "prEditedNotification",
+    "prIgnoreNotification",
+  ],
+  "packageRules": [
+    {
+      "matchManagers": ["pip_requirements", "pip_setup", "pyproject"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
+      "matchPackagePatterns": ["pytest"],
+      "groupName": "pytest packages"
+    }
+  ],
+  "python": {
+    "enabled": true
+  },
+  "pip_requirements": {
+    "fileMatch": ["(^|/)requirements\\.txt$", "(^|/)requirements\\/.+\\.txt$"]
+  },
+  "pyproject": {
+    "fileMatch": ["(^|/)pyproject\\.toml$"]
+  },
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 5am on monday"]
+  },
+  "timezone": "America/New_York",
+  "prHourlyLimit": 2,
+  "prConcurrentLimit": 10,
+}
