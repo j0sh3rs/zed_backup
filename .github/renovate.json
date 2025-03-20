@@ -44,11 +44,6 @@
   },
   "prConcurrentLimit": 10,
   "prHourlyLimit": 2,
-  "pyproject": {
-    "fileMatch": [
-      "(^|/)pyproject\\.toml$"
-    ]
-  },
   "python": {
     "enabled": true
   },
