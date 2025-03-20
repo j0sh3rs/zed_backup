@@ -22,7 +22,7 @@
       "automerge": true,
       "matchManagers": [
         "pip_requirements",
-        "pip_setup",
+        "pip_setup"
       ],
       "matchUpdateTypes": [
         "minor",
